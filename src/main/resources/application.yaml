@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: telegram-adapter
+  config:
+    import: optional:configserver:http://user:password@localhost:8888/
+  cloud:
+    config:
+      label: master
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+#         refresh context: curl -H "Content-Type: application/json" -d {} http://localhost:8081/actuator/refresh
+        include: "*"
