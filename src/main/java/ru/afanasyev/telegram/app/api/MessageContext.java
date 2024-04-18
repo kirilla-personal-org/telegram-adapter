@@ -7,4 +7,5 @@ import ru.afanasyev.telegram.domain.Language;
 public class MessageContext {
     private Language language;
     private String input;
+    private String chatId;
 }

@@ -3,6 +3,8 @@ package ru.afanasyev.telegram.adapter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -10,6 +12,7 @@ import ru.afanasyev.telegram.app.api.CommandHandler;
 import ru.afanasyev.telegram.app.api.MessageContext;
 import ru.afanasyev.telegram.domain.Language;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -31,10 +34,7 @@ public class MovieMatchBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         try {
-            String chatId = update.getMessage().getChatId().toString();
-            SendMessage message = handleCommand(update);
-            message.setChatId(chatId);
-            execute(message);
+            handleCommand(update);
         } catch (TelegramApiException e) {
             log.error(e.getMessage());
         }
@@ -49,18 +49,21 @@ public class MovieMatchBot extends TelegramLongPollingBot {
     // = Implementation
     // ===================================================================================================================
 
-    private SendMessage handleCommand(Update update) {
+    private void handleCommand(Update update) throws TelegramApiException {
         MessageContext context = getContext(update);
         CommandHandler commandHandler = commands.get(context.getInput());
         if (commandHandler != null) {
-            return commandHandler.handle(context);
+            commandHandler.handle(context, this);
+            return;
         }
         throw new IllegalArgumentException("Cannot resolve input command: " + context.getInput());
     }
 
     private MessageContext getContext(Update update) {
+        String chatId = update.getMessage().getChatId().toString();
         MessageContext messageContext = new MessageContext();
         messageContext.setInput(getInput(update));
+        messageContext.setChatId(chatId);
         messageContext.setLanguage(Language.getByCode(update.getMessage().getFrom().getLanguageCode()));
         return messageContext;
     }

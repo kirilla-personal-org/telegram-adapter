@@ -1,9 +1,10 @@
 package ru.afanasyev.telegram.app.api;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.bots.AbsSender;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public interface CommandHandler {
-    SendMessage handle(MessageContext context);
+    void handle(MessageContext context, AbsSender sender) throws TelegramApiException;
 
     String supports();
 }

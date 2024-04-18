@@ -1,3 +1,4 @@
 russian-lang:
   dictionary:
     START: Привет, Мир!
+    GET_RANDOM_MOVIE_RESPONSE: "Название: %s\nРейтинг: \n - Кинопоиск: %s\n - imdb: %s"

@@ -1,5 +1,5 @@
 package ru.afanasyev.telegram.domain;
 
 public enum Message {
-    START
+    START, GET_RANDOM_MOVIE_RESPONSE
 }
