@@ -1,4 +1,4 @@
-package ru.afanasyev.telegram.fw;
+package ru.afanasyev.telegram.fw.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

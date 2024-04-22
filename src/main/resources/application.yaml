@@ -1,6 +1,5 @@
 server:
   port: 3000
-
 spring:
   application:
     name: telegram-adapter
@@ -9,6 +8,17 @@ spring:
   cloud:
     config:
       label: master
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: redis
+      timeout: 60000
+      database: 0
+
+telegram-adapter:
+  settings:
+    movie-sending-delay: 3600000
 
 service:
   movie-match:

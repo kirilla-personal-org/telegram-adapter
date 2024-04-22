@@ -8,4 +8,5 @@ public class MessageContext {
     private Language language;
     private String input;
     private String chatId;
+    private String username;
 }

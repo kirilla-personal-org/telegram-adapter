@@ -14,8 +14,7 @@ import java.util.List;
 public class LanguageService {
     private final List<LanguageAdapter> languageAdapters;
 
-    public String accept(Message message, MessageContext messageContext) {
-        Language language = messageContext.getLanguage();
+    public String accept(Message message, Language language) {
         return getSupportedAdapter(language).accept(message);
     }
 

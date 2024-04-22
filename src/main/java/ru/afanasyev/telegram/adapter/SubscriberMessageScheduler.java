@@ -1,57 +1,61 @@
-package ru.afanasyev.telegram.app.impl.command;
+package ru.afanasyev.telegram.adapter;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.bots.AbsSender;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.afanasyev.telegram.adapter.moviematch.MovieMathAdapter;
 import ru.afanasyev.telegram.app.api.BotUpdateException;
-import ru.afanasyev.telegram.app.api.CommandHandler;
-import ru.afanasyev.telegram.app.api.GetMovieOutbound;
-import ru.afanasyev.telegram.app.api.MessageContext;
+import ru.afanasyev.telegram.app.api.SubscriberService;
 import ru.afanasyev.telegram.app.impl.lang.LanguageService;
+import ru.afanasyev.telegram.domain.Language;
+import ru.afanasyev.telegram.domain.Subscriber;
 import ru.afanasyev.telegram.domain.movie.Movie;
 import ru.afanasyev.telegram.domain.movie.Rating;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 
 import static ru.afanasyev.telegram.domain.Message.GET_RANDOM_MOVIE_RESPONSE;
 
 @Component
 @RequiredArgsConstructor
-public class GetRandomMovieCommand implements CommandHandler {
-    private final GetMovieOutbound getMovieOutbound;
+@Slf4j
+public class SubscriberMessageScheduler {
+    private final MovieMatchBot bot;
+    private final SubscriberService subscriberService;
     private final LanguageService languageService;
+    private final MovieMathAdapter movieMathAdapter;
 
-    @Override
-    public void handle(MessageContext context, AbsSender sender) throws TelegramApiException {
-        Movie movie = getMovieOutbound.getRandom();
-        SendPhoto sendPhoto = getSendPhoto(movie, context);
-        sender.execute(sendPhoto);
-    }
-
-    @Override
-    public String supports() {
-        return "/get-movie";
+    @SneakyThrows
+    @Scheduled(fixedDelayString = "${telegram-adapter.settings.movie-sending-delay}")
+    public void sendRandomMovie() {
+        Movie movie = movieMathAdapter.getRandom();
+        List<Subscriber> subscribers = subscriberService.findAll();
+        for (Subscriber subscriber : subscribers) {
+            SendPhoto sendPhoto = getSendPhoto(movie, subscriber.getChatId(), Language.RUSSIAN);
+            bot.execute(sendPhoto);
+        }
     }
 
     // ===================================================================================================================
     // = Implementation
     // ===================================================================================================================
 
-    private SendPhoto getSendPhoto(Movie movie, MessageContext context) {
+    private SendPhoto getSendPhoto(Movie movie, String chatId, Language language) {
         try {
             InputStream input = new URL(movie.getPoster().getPreviewUrl()).openStream();
-            Rating rating = movie.getRating();
             InputFile inputFile = new InputFile(input, movie.getName());
+            Rating rating = movie.getRating();
             SendPhoto sendPhoto = new SendPhoto();
-            sendPhoto.setChatId(context.getChatId());
+            sendPhoto.setChatId(chatId);
             sendPhoto.setPhoto(inputFile);
-            sendPhoto.setCaption(String.format(languageService.accept(GET_RANDOM_MOVIE_RESPONSE, context),
+            sendPhoto.setCaption(String.format(languageService.accept(GET_RANDOM_MOVIE_RESPONSE, language),
                 movie.getName(), rating.getKp(), rating.getImdb()));
             return sendPhoto;
         } catch (IOException e) {

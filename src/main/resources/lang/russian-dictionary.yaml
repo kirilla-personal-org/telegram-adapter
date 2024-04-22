@@ -2,3 +2,5 @@ russian-lang:
   dictionary:
     START: Привет, Мир!
     GET_RANDOM_MOVIE_RESPONSE: "Название: %s\nРейтинг: \n - Кинопоиск: %s\n - imdb: %s"
+    SUBSCRIBE: Подписка на новости и фильмы успешно оформлена!
+    UNSUBSCRIBE: Вы отписались от новостей :(

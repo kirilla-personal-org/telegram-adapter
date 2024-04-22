@@ -39,6 +39,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation "org.telegram:telegrambots-spring-boot-starter:${telegramVersion}"
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation "org.telegram:telegrambots-abilities:${telegramVersion}"
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign:${openFeigCoreVersion}"
     implementation 'ru.afanasyev:movie-bean-visualizer:1.0-SNAPSHOT'

@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+    - '6379:6379'
+    # password: redis
+    command: redis-server --save 20 1 --loglevel warning --requirepass redis
+    volumes:
+    - cache:/data
+
+volumes:
+  cache:
+    driver: local
