@@ -3,8 +3,6 @@ package ru.afanasyev.telegram.app.impl.command;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.afanasyev.telegram.app.api.CommandHandler;
@@ -12,13 +10,9 @@ import ru.afanasyev.telegram.app.api.MessageContext;
 import ru.afanasyev.telegram.app.api.SubscriberService;
 import ru.afanasyev.telegram.app.impl.lang.LanguageService;
 import ru.afanasyev.telegram.domain.Command;
-import ru.afanasyev.telegram.domain.Message;
 import ru.afanasyev.telegram.domain.Subscriber;
 
-import java.util.List;
-
 import static ru.afanasyev.telegram.domain.Message.SUBSCRIBE;
-import static ru.afanasyev.telegram.domain.Message.UNSUBSCRIBE;
 
 @Component
 @RequiredArgsConstructor

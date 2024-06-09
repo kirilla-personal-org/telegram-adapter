@@ -10,10 +10,8 @@ import ru.afanasyev.telegram.app.api.MessageContext;
 import ru.afanasyev.telegram.app.impl.KeyboardFactory;
 import ru.afanasyev.telegram.app.impl.lang.LanguageService;
 import ru.afanasyev.telegram.domain.Command;
-import ru.afanasyev.telegram.domain.Message;
 
 import static ru.afanasyev.telegram.domain.Message.START;
-import static ru.afanasyev.telegram.domain.Message.SUBSCRIBE;
 
 @Component
 @RequiredArgsConstructor

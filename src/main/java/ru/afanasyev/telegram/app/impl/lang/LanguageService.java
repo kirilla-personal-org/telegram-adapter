@@ -2,7 +2,6 @@ package ru.afanasyev.telegram.app.impl.lang;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.afanasyev.telegram.app.api.MessageContext;
 import ru.afanasyev.telegram.app.api.LanguageAdapter;
 import ru.afanasyev.telegram.domain.Language;
 import ru.afanasyev.telegram.domain.Message;
