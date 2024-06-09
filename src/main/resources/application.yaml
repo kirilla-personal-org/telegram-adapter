@@ -19,6 +19,7 @@ spring:
 telegram-adapter:
   settings:
     movie-sending-delay: 3600000
+    enable-subscription-mailing: false
 
 service:
   movie-match:

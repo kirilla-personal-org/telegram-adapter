@@ -3,6 +3,7 @@ package ru.afanasyev.telegram.adapter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -26,6 +27,7 @@ import static ru.afanasyev.telegram.domain.Message.GET_RANDOM_MOVIE_RESPONSE;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@ConditionalOnProperty(value = "telegram-adapter.settings.enable-subscription-mailing", havingValue = "true")
 public class SubscriberMessageScheduler {
     private final MovieMatchBot bot;
     private final SubscriberService subscriberService;
