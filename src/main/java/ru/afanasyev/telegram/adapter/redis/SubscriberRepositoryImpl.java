@@ -7,6 +7,8 @@ import ru.afanasyev.telegram.app.api.SubscriberRepository;
 import ru.afanasyev.telegram.domain.Subscriber;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -19,8 +21,8 @@ public class SubscriberRepositoryImpl implements SubscriberRepository {
     }
 
     @Override
-    public Subscriber findById(Long id) {
-        return null;
+    public Optional<Subscriber> findById(String id) {
+        return repository.findById(id);
     }
 
     @Override
@@ -31,5 +33,13 @@ public class SubscriberRepositoryImpl implements SubscriberRepository {
     @Override
     public void deleteById(String id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public List<Subscriber> findAllActive() {
+        // TODO optimize
+        return Lists.newArrayList(repository.findAll()).stream()
+            .filter(Subscriber::getIsActive)
+            .collect(Collectors.toList());
     }
 }

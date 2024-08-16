@@ -10,6 +10,7 @@ import ru.afanasyev.telegram.app.api.SubscriberService;
 import ru.afanasyev.telegram.domain.Subscriber;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -25,9 +26,12 @@ public class SubscriberServiceImpl implements SubscriberService {
     @Async
     @Override
     @Transactional
-    public void save(Subscriber subscriber) {
+    public void handleSubscribe(Subscriber subscriber) {
         log.info("New subscriber: {}", subscriber);
-        repository.save(subscriber);
+        Subscriber subscriberToSave = repository.findById(subscriber.getChatId())
+            .orElse(subscriber);
+        subscriberToSave.setIsActive(true);
+        repository.save(subscriberToSave);
         logSubscribers();
     }
 
@@ -37,9 +41,18 @@ public class SubscriberServiceImpl implements SubscriberService {
     }
 
     @Override
-    public void delete(String id) {
+    public void handleUnsubscribe(String id) {
         log.info("Deleting subscriber by id: {}", id);
-        repository.deleteById(id);
-        logSubscribers();
+        repository.findById(id).ifPresent(subscriber -> {
+            subscriber.setIsActive(false);
+            repository.save(subscriber);
+            logSubscribers();
+        });
+    }
+
+    @Override
+    public List<Subscriber> findAllActive() {
+        log.info("Finding all active subscribers");
+        return repository.findAllActive();
     }
 }

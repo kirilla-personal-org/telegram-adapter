@@ -21,4 +21,10 @@ public class Subscriber implements Serializable {
     @Id
     private String chatId;
     private String username;
+    private Boolean isActive;
+
+    public Subscriber(String chatId, String username) {
+        this.chatId = chatId;
+        this.username = username;
+    }
 }

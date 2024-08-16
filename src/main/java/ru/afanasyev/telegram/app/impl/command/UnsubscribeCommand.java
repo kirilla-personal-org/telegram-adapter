@@ -23,7 +23,7 @@ public class UnsubscribeCommand implements CommandHandler {
     public void handle(MessageContext context, AbsSender sender) throws TelegramApiException {
         SendMessage sendMessage = getDefaultMessage(context, languageService, UNSUBSCRIBE);
         sender.execute(sendMessage);
-        subscriberService.delete(context.getChatId());
+        subscriberService.handleUnsubscribe(context.getChatId());
     }
 
     @Override

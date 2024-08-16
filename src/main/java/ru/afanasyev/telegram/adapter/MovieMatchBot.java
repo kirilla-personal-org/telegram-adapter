@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.afanasyev.telegram.app.api.CommandHandler;
 import ru.afanasyev.telegram.app.api.MessageContext;
+import ru.afanasyev.telegram.app.api.SendMessageOutbound;
 import ru.afanasyev.telegram.domain.Language;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import static java.util.stream.Collectors.toMap;
 
 @Component
 @Slf4j
-public class MovieMatchBot extends TelegramLongPollingBot {
+public class MovieMatchBot extends TelegramLongPollingBot implements SendMessageOutbound {
     private final TelegramProperties telegramProperties;
     private final Map<String, CommandHandler> commands;
 

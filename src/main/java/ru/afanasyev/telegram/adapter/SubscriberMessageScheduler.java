@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import ru.afanasyev.telegram.adapter.moviematch.MovieMathAdapter;
 import ru.afanasyev.telegram.app.api.BotUpdateException;
+import ru.afanasyev.telegram.app.api.SendMessageOutbound;
 import ru.afanasyev.telegram.app.api.SubscriberService;
 import ru.afanasyev.telegram.app.impl.lang.LanguageService;
 import ru.afanasyev.telegram.domain.Language;
@@ -29,7 +30,7 @@ import static ru.afanasyev.telegram.domain.Message.GET_RANDOM_MOVIE_RESPONSE;
 @Slf4j
 @ConditionalOnProperty(value = "telegram-adapter.settings.enable-subscription-mailing", havingValue = "true")
 public class SubscriberMessageScheduler {
-    private final MovieMatchBot bot;
+    private final SendMessageOutbound sendMessageOutbound;
     private final SubscriberService subscriberService;
     private final LanguageService languageService;
     private final MovieMathAdapter movieMathAdapter;
@@ -38,10 +39,10 @@ public class SubscriberMessageScheduler {
     @Scheduled(fixedDelayString = "${telegram-adapter.settings.movie-sending-delay}")
     public void sendRandomMovie() {
         Movie movie = movieMathAdapter.getRandom();
-        List<Subscriber> subscribers = subscriberService.findAll();
+        List<Subscriber> subscribers = subscriberService.findAllActive();
         for (Subscriber subscriber : subscribers) {
             SendPhoto sendPhoto = getSendPhoto(movie, subscriber.getChatId(), Language.RUSSIAN);
-            bot.execute(sendPhoto);
+            sendMessageOutbound.execute(sendPhoto);
         }
     }
 

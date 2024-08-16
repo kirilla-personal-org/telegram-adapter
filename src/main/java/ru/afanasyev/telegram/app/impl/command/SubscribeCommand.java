@@ -37,6 +37,6 @@ public class SubscribeCommand implements CommandHandler {
     // ===================================================================================================================
 
     private void saveSubscriber(MessageContext context) {
-        subscriberService.save(new Subscriber(context.getChatId(), context.getUsername()));
+        subscriberService.handleSubscribe(new Subscriber(context.getChatId(), context.getUsername()));
     }
 }
